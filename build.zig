@@ -23,21 +23,16 @@ pub fn build(b: *std.Build) void {
         },
     });
 
-    const install_netcat = b.addInstallFileWithDir(b.path("netcat.sh"), applications_dir, "netcat.app");
-    install_netcat.step.dependOn(&install_artifact.step);
-
-    const install_gdbserver = b.addInstallFileWithDir(b.path("gdbserver.sh"), applications_dir, "gdbserver.app");
-    install_gdbserver.step.dependOn(&install_netcat.step);
-
-    const install_pdf = b.addInstallFileWithDir(b.path("SDK.pdf"), .prefix, "SDK.pdf");
-    install_pdf.step.dependOn(&install_gdbserver.step);
+    install_artifact.step.dependOn(&b.addInstallFileWithDir(b.path("netcat.sh"), applications_dir, "netcat.app").step);
+    install_artifact.step.dependOn(&b.addInstallFileWithDir(b.path("gdbserver.sh"), applications_dir, "gdbserver.app").step);
+    install_artifact.step.dependOn(&b.addInstallFileWithDir(b.path("SDK.pdf"), .prefix, "SDK.pdf").step);
 
     const dest_ip = b.option([]const u8, "dest_ip", "device ip") orelse "";
     if (std.mem.eql(u8, "", dest_ip)) {
-        b.getInstallStep().dependOn(&install_pdf.step);
+        b.getInstallStep().dependOn(&install_artifact.step);
     } else {
         const send_tar = SendTar.create(b, dest_ip, 10003);
-        send_tar.step.dependOn(&install_pdf.step);
+        send_tar.step.dependOn(&install_artifact.step);
         b.getInstallStep().dependOn(&send_tar.step);
     }
 }
