@@ -25,7 +25,7 @@ pub fn build(b: *std.Build) void {
 
     install_artifact.step.dependOn(&b.addInstallFileWithDir(b.path("netcat.sh"), applications_dir, "netcat.app").step);
     install_artifact.step.dependOn(&b.addInstallFileWithDir(b.path("gdbserver.sh"), applications_dir, "gdbserver.app").step);
-    install_artifact.step.dependOn(&b.addInstallFileWithDir(b.path("SDK.pdf"), .prefix, "SDK.pdf").step);
+    install_artifact.step.dependOn(&b.addInstallFileWithDir(b.path("SDK.pdf"), .prefix, "PocketBook SDK Documentation.pdf").step);
 
     const dest_ip = b.option([]const u8, "dest_ip", "device ip") orelse "";
     if (std.mem.eql(u8, "", dest_ip)) {
