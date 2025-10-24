@@ -6,6 +6,7 @@ pub fn build(b: *std.Build) void {
         .name = "hello_world.app",
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/hello_world.zig"),
+            // .root_source_file = b.path("src/hello_world_two.zig"),
             // .root_source_file = b.path("src/scroll_view.zig"),
             // .root_source_file = b.path("src/selection_list.zig"),
             .target = b.resolveTargetQuery(.{
