@@ -1,5 +1,5 @@
 const std = @import("std");
-const app_state = @import("app_state.zig");
+const AppState = @import("app_state.zig").AppState;
 
 const c = @cImport({
     @cInclude("inkview.h");
@@ -7,23 +7,23 @@ const c = @cImport({
 
 const kFontSize: c_int = 40;
 
-var state: app_state.AppState = .{ .font_size = kFontSize };
+var app_state: AppState = .{ .font_size = kFontSize };
 
 fn main_handler(event_type: c_int, _: c_int, _: c_int) callconv(.c) c_int {
     var rv: c_int = 0;
 
     switch (event_type) {
         c.EVT_INIT => {
-            rv = state.onInit();
+            rv = app_state.onInit();
         },
         c.EVT_SHOW => {
-            state.onShow();
+            app_state.onShow();
         },
         c.EVT_KEYPRESS => {
-            state.onKeyPress();
+            app_state.onKeyPress();
         },
         c.EVT_EXIT => {
-            state.onExit();
+            app_state.onExit();
         },
         else => {},
     }
