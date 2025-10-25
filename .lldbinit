@@ -1,0 +1,6 @@
+process handle -p false -s false -n true SIGTRAP
+process handle -p true -s false -n true SIGILL
+
+target create --arch armv7 ./zig-out/applications/hello_world.app
+
+gdb-remote 192.168.###.###:10002

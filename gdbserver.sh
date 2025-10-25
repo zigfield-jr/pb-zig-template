@@ -22,6 +22,12 @@ if [ $choice -ne 2 ]; then
   exit 0
 fi
 
+/ebrmain/bin/netagent connect
+if [ $? -ne 0 ]; then
+  /ebrmain/bin/dialog 5 '' @WiFiNetworkIsNotWorking @OK
+  exit 0
+fi
+
 /ebrmain/bin/gdbserver :10002 /mnt/ext1/applications/hello_world.app &
 
 pid="$(pidof bookshelf.app)"

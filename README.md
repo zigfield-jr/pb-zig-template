@@ -24,7 +24,7 @@ Start the script, answer possible questions.
 Build project with option `dest_ip`
 
 ```
-zig build -Ddest_ip=192.168.???.???
+zig build -Ddest_ip=192.168.###.###
 ```
 
 ## Debug
@@ -33,9 +33,9 @@ Copy `zig-out/applications/gdbserver.app` to device folder `/applications`
 
 Start the script, answer possible questions.
 
-Set device IP in [GDB configuration](.gdbinit).
+Set device IP in [GDB](.gdbinit) (or [LLDB](.lldbinit)) configuration.
 
-Run `gdb` in terminal (and project folder).
+Run `gdb` (or `lldb`) in terminal (and project folder).
 
 On device open the task manager, `hello_world` should be listed.
 
