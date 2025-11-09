@@ -78,10 +78,13 @@ const SendTar = struct {
         const b = step.owner;
         const send_tar: *SendTar = @fieldParentPtr("step", step);
 
-        var tcp_stream = try std.net.tcpConnectToAddress(try std.net.Address.parseIp(send_tar.dest_ip, send_tar.dest_port));
-        defer tcp_stream.close();
+        var threaded: std.Io.Threaded = .init_single_threaded;
+        const io = threaded.io();
+
+        var tcp_stream = try std.Io.net.IpAddress.connect(try std.Io.net.IpAddress.parse(send_tar.dest_ip, send_tar.dest_port), io, .{ .mode = .stream });
+        defer tcp_stream.close(io);
         var tcp_buffer: [1024]u8 = undefined;
-        var tcp_writer = tcp_stream.writer(&tcp_buffer);
+        var tcp_writer = tcp_stream.writer(io, &tcp_buffer);
 
         var gzip_buffer: [std.compress.flate.max_window_len]u8 = undefined;
         var gzip_compress: std.compress.flate.Compress = try .init(&tcp_writer.interface, &gzip_buffer, .gzip, .default);
@@ -101,9 +104,9 @@ const SendTar = struct {
                     const file = try install_entry.dir.openFile(install_entry.basename, .{ .mode = .read_only });
                     defer file.close();
                     var file_buffer: [1024]u8 = undefined;
-                    var file_reader = file.reader(&file_buffer);
+                    var file_reader = file.reader(io, &file_buffer);
 
-                    try tar_writer.writeFile(install_entry.path, &file_reader, std.time.nanoTimestamp());
+                    try tar_writer.writeFile(install_entry.path, &file_reader, 0);
                 },
                 else => {},
             }

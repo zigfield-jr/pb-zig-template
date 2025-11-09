@@ -5,7 +5,7 @@ an [SDK 6.5](https://github.com/pocketbook/SDK_6.3.0/tree/6.5/SDK-B288/usr/arm-o
 
 ## USB
 
-Build project with release containing https://github.com/ziglang/zig/pull/25301
+Build project with release containing https://github.com/ziglang/zig/pull/25592
 
 ```
 zig build

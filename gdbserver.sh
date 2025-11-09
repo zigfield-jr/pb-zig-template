@@ -30,5 +30,4 @@ fi
 
 /ebrmain/bin/gdbserver :10002 /mnt/ext1/applications/hello_world.app &
 
-pid="$(pidof bookshelf.app)"
-/ebrmain/bin/iv2sh SetActiveTask $pid
+/ebrmain/bin/iv2sh SetActiveTask "$(pidof bookshelf.app)"
