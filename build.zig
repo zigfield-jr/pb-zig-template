@@ -19,13 +19,13 @@ pub fn build(b: *std.Build) void {
         }),
     });
 
-    exe.addIncludePath(b.path("sdk/include"));
-    exe.addIncludePath(b.path("sdk/include/freetype2"));
-    exe.addIncludePath(b.path("sdk/local/include"));
-    exe.addLibraryPath(b.path("sdk/local/lib"));
-    exe.linkSystemLibrary("hwconfig");
-    exe.linkSystemLibrary("inkview");
-    exe.linkLibC();
+    exe.root_module.addIncludePath(b.path("sdk/include"));
+    exe.root_module.addIncludePath(b.path("sdk/include/freetype2"));
+    exe.root_module.addIncludePath(b.path("sdk/local/include"));
+    exe.root_module.addLibraryPath(b.path("sdk/local/lib"));
+    exe.root_module.linkSystemLibrary("hwconfig", .{});
+    exe.root_module.linkSystemLibrary("inkview", .{});
+    exe.root_module.link_libc = true;
 
     const applications_dir: std.Build.InstallDir = .{ .custom = "applications" };
 
