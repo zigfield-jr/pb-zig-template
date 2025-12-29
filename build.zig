@@ -92,17 +92,17 @@ const SendTar = struct {
 
         var tar_writer: std.tar.Writer = .{ .underlying_writer = gzip_writer };
 
-        var install_dir = try std.fs.cwd().openDir(b.getInstallPath(.prefix, ""), .{ .iterate = true });
-        defer install_dir.close();
+        var install_dir = try std.Io.Dir.openDirAbsolute(io, b.getInstallPath(.prefix, ""), .{ .iterate = true });
+        defer install_dir.close(io);
 
         var install_walker = try install_dir.walk(b.allocator);
         defer install_walker.deinit();
 
-        while (try install_walker.next()) |install_entry| {
+        while (try install_walker.next(io)) |install_entry| {
             switch (install_entry.kind) {
                 .file => {
-                    const file = try install_entry.dir.openFile(install_entry.basename, .{ .mode = .read_only });
-                    defer file.close();
+                    const file = try install_entry.dir.openFile(io, install_entry.basename, .{ .mode = .read_only });
+                    defer file.close(io);
                     var file_buffer: [1024]u8 = undefined;
                     var file_reader = file.reader(io, &file_buffer);
 
