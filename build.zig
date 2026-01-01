@@ -14,7 +14,7 @@ pub fn build(b: *std.Build) void {
                 .cpu_model = .{ .explicit = &std.Target.arm.cpu.cortex_a7 },
                 .os_tag = .linux,
                 .abi = .gnueabi,
-                .glibc_version = .{ .major = 2, .minor = 23, .patch = 0 },
+                .glibc_version = .{ .major = 2, .minor = 25, .patch = 0 }, // std.Io.Threaded.init_single_threaded
             }),
         }),
     });
