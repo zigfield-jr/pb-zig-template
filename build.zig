@@ -47,6 +47,32 @@ pub fn build(b: *std.Build) void {
         send_tar.step.dependOn(&install_artifact.step);
         b.getInstallStep().dependOn(&send_tar.step);
     }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    // https://github.com/FalsePattern/ZigBrains/issues/82#issuecomment-2758853680 //
+    //                                  Build steps: test                          //
+    //                            Debug Build steps: test                          //
+    // Debug output executable created by the build: zig-out/tests/test (absolute) //
+    /////////////////////////////////////////////////////////////////////////////////
+
+    const test_exe = b.addTest(.{
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/test.zig"),
+            .target = b.graph.host,
+        }),
+    });
+
+    const test_install_artifact = b.addInstallArtifact(test_exe, .{
+        .dest_dir = .{
+            .override = .{ .custom = "tests" },
+        },
+    });
+
+    const test_run_artifact = b.addRunArtifact(test_exe);
+
+    const test_step = b.step("test", "Run tests");
+    test_step.dependOn(&test_install_artifact.step);
+    test_step.dependOn(&test_run_artifact.step);
 }
 
 const SendTar = struct {
