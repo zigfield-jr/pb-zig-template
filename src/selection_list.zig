@@ -20,14 +20,13 @@ fn main_handler(event_type: c_int, param_one: c_int, param_two: c_int) callconv(
         c.EVT_INIT => {
             const screen_rect = c.irect{
                 .w = c.ScreenWidth(),
-                .h = c.ScreenHeight() - c.GetCaptionHeight(),
+                .h = c.ScreenHeight(),
             };
             selection_list = c.SelectionList_Init(screen_rect, @ptrCast(&cb), @ptrCast(&cb_context), 100);
             _ = c.SelectionList_SetItemcount(selection_list, 20);
             _ = c.SelectionList_UseDraggableScroller(selection_list, 1);
         },
         c.EVT_SHOW => {
-            _ = c.Message(1, "", "fix caption", 500);
             _ = c.SelectionList_Draw(selection_list);
             _ = c.SelectionList_Update(selection_list);
         },
@@ -59,5 +58,6 @@ fn item_long_clicked(_: ?*anyopaque, _: c_int, _: c_int, _: c_int) callconv(.c) 
 fn scroll_position_changed(_: ?*anyopaque, _: c_int, _: c_int) callconv(.c) void {}
 
 pub fn main() !void {
+    c.SetCurrentApplicationAttribute(c.APPLICATION_READER, 1); // hide context menu
     c.InkViewMain(main_handler);
 }

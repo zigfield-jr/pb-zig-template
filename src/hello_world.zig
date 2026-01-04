@@ -26,5 +26,6 @@ fn main_handler(event_type: c_int, _: c_int, _: c_int) callconv(.c) c_int {
 }
 
 pub fn main() !void {
+    c.SetCurrentApplicationAttribute(c.APPLICATION_READER, 1); // hide context menu
     c.InkViewMain(main_handler);
 }
