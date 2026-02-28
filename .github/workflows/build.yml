@@ -8,6 +8,7 @@ name: Build
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 1
     steps:
       - uses: actions/checkout@v6
 
